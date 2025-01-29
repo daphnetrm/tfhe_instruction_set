@@ -1,7 +1,5 @@
 # Artifact for "Designing an 8-bit General-Purpose (T)FHE Processor Abstraction"
-Dear referees,
-
-The submitted artifact is the source code of the 8-bit TFHE processor abstraction proposed in the paper ``Designing an 8-bit General-Purpose (T)FHE Processor Abstraction''. 
+This is the source code of the 8-bit TFHE processor abstraction proposed in the paper ``Designing an 8-bit General-Purpose (T)FHE Processor Abstraction''. 
 It relies on version 1.1 of the TFHElib library (which runs over C++). Our artifact implements each instruction given in the paper (the complete list is in Appendix A of the paper) as well as the algorithms designed as a benchmark for the new approach (see Table 6 in Section 8).
 All multivariate instructions are implemented in the instr.cpp file. The corresponding header instr.h defines each function of instr.cpp and give the corresponding section in the article. 
 In the same fashion, we have respectively created the instri.cpp (resp. algos.cpp and instr_16.cpp) files to implement the univariate instructions (resp. the algorithms and 16-bit fixed point arithmetic operations) and their corresponding headers instri.h (resp. algos.h and instr_16.h) that link the functions to the correct sections of the paper.
@@ -36,4 +34,3 @@ timings : 0.49377s
 This allows the user to verify if the homomorphic results are correct and to check the timings. 
 For comparison, the execution timings obtained on our machine with the same code are given in Appendix A and Section 8 of the article.
 
-Many thanks in advance for the time you will spend evaluating our work.

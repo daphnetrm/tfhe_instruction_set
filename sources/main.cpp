@@ -109,7 +109,7 @@ void test_16(TFheGateBootstrappingSecretKeySet* key, BaseBKeySwitchKey* ks_key, 
   lweCopy(result_bis[0], result[2], key->lwe_key->params);
   lweCopy(result_bis[1], result[3], key->lwe_key->params);
   float dec_f = decrypt_dec(result_bis, key);
-  printf("  %f + %f = %f (should be %f)\n", a, b, dec+dec_f, a+b);
+  printf("  %f + %f = %f (should be close to %f)\n", a, b, dec+dec_f, a+b);
   printf("  timing : %.5f\n\n", elapsed);
 
   printf("MULi_16\n");
@@ -123,7 +123,7 @@ void test_16(TFheGateBootstrappingSecretKeySet* key, BaseBKeySwitchKey* ks_key, 
   lweCopy(result_bis[0], result[2], key->lwe_key->params);
   lweCopy(result_bis[1], result[3], key->lwe_key->params);
   dec_f = decrypt_dec(result_bis, key);
-  printf("  %f * %f = %f (should be %f)\n", b, a, dec+dec_f, a*b);
+  printf("  %f * %f = %f (should be close to %f)\n", b, a, dec+dec_f, a*b);
   printf("  timing : %.5f\n\n", elapsed);
   
   printf("Neuron evaluation with sigmoid\n");
@@ -137,7 +137,7 @@ void test_16(TFheGateBootstrappingSecretKeySet* key, BaseBKeySwitchKey* ks_key, 
   lweCopy(result_bis[0], result[2], key->lwe_key->params);
   lweCopy(result_bis[1], result[3], key->lwe_key->params);
   dec_f = decrypt_dec(result_bis, key);
-  printf("  Neuron(%f, %f) = sigmoid(%f*0.75 + %f*0.125) = %f (should be %f)\n", a, b, a, b, dec+dec_f, clear_neuron_sigmoid(a,b));
+  printf("  Neuron(%f, %f) = sigmoid(%f*0.75 + %f*0.125) = %f (should be close to %f)\n", a, b, a, b, dec+dec_f, clear_neuron_sigmoid(a,b));
   printf("  timing : %.5f\n\n", elapsed);
 
   printf("Neuron evaluation with Heaviside\n");
@@ -151,7 +151,7 @@ void test_16(TFheGateBootstrappingSecretKeySet* key, BaseBKeySwitchKey* ks_key, 
   lweCopy(result_bis[0], result[2], key->lwe_key->params);
   lweCopy(result_bis[1], result[3], key->lwe_key->params);
   dec_f = decrypt_dec(result_bis, key);
-  printf("  Neuron(%f, %f) = heaviside(%f*0.75 + %f*0.125) = %f (should be %f)\n", a, b, a, b, dec+dec_f, clear_neuron_heaviside(a,b));
+  printf("  Neuron(%f, %f) = heaviside(%f*0.75 + %f*0.125) = %f (should be close to %f)\n", a, b, a, b, dec+dec_f, clear_neuron_heaviside(a,b));
     printf("  timing : %.5f\n", elapsed);
 }
 
@@ -168,7 +168,7 @@ int main(int argc, char *argv[]){
     tab_clear[i] = atoi(argv[i+1]);
   word8 a =   atoi(argv[1]);
   word8 b =   atoi(argv[2]);
-  //(0) définir les paramètres pour le chiffrement homomorphe
+
   const int minimum_lambda = 110;
   static const int32_t N = 2048;
   static const int32_t k = 1;
@@ -492,13 +492,13 @@ int main(int argc, char *argv[]){
 
   printf("Right shift\n");
   clock_gettime(CLOCK_REALTIME, &begin);
-  SHRi(result, ca, b_lsb, key, ks_key);
+  SHRi(result, ca, 3, key, ks_key);
   clock_gettime(CLOCK_REALTIME, &end);
   seconds = end.tv_sec - begin.tv_sec;
   nanoseconds = end.tv_nsec - begin.tv_nsec;
   elapsed = seconds + nanoseconds*1e-9;
   dec = decrypt(result, key);
-  printf("  SHRi: %d>>%d = %d \n", a, b_lsb, dec);
+  printf("  SHRi: %d>>%d = %d \n", a, 3, dec);
   printf("  timing: %.5f\n", elapsed);
   
   clock_gettime(CLOCK_REALTIME, &begin);
@@ -937,7 +937,11 @@ int main(int argc, char *argv[]){
    vector<LweSample*> tmp;   
    tmp.push_back(new_LweSample(key->lwe_key->params));
    tmp.push_back(new_LweSample(key->lwe_key->params));
-
+   printf("/****************************************************************************/\n");
+   printf("Now we execute several algorithm on Table [ ");
+   for(int i=0; i<argc-1; i++)
+     printf("%d ",tab_clear[i]);
+   printf("]\n");
    printf("Bubble sort\n");
    clock_gettime(CLOCK_REALTIME, &begin);
    bubble_sort(av, argc-1, key, ks_key);
@@ -955,7 +959,7 @@ int main(int argc, char *argv[]){
    printf("\ntiming : %.5f\n\n", elapsed);
   
  
-   printf("Max of the Array \n");
+   printf("Maximum of Array \n");
    clock_gettime(CLOCK_REALTIME, &begin);
    maximum(result, v, argc-1, key, ks_key);
    clock_gettime(CLOCK_REALTIME, &end);
@@ -963,7 +967,7 @@ int main(int argc, char *argv[]){
    nanoseconds = end.tv_nsec - begin.tv_nsec;
    elapsed = seconds + nanoseconds*1e-9;
    dec= decrypt(result, key);
-   printf("Max of Array: %d\n ", dec);
+   printf("Maximum of Array: %d\n ", dec);
    printf("timing : %.5f\n\n", elapsed);
   
   
@@ -1001,11 +1005,11 @@ int main(int argc, char *argv[]){
    printf("timing : %.5f\n\n", elapsed);
 
    
-   printf("Array Assignment\n");
+   printf("Array Assignment: we assign an encryption of 0 in position 1.\n");
    lweSymEncrypt(one[0], modSwitchToTorus32(0, 32), alpha, key->lwe_key);
    lweSymEncrypt(one[1], modSwitchToTorus32(1, 32), alpha, key->lwe_key);
    clock_gettime(CLOCK_REALTIME, &begin);
-   array_assign(v, av[0], one, argc-1, key, ks_key);
+   array_assign(v, zero, one, argc-1, key, ks_key);
    clock_gettime(CLOCK_REALTIME, &end);
    seconds = end.tv_sec - begin.tv_sec;
    nanoseconds = end.tv_nsec - begin.tv_nsec;
@@ -1017,8 +1021,8 @@ int main(int argc, char *argv[]){
      dec= decrypt(tmp, key);
      printf("%d ", dec);
    }
-   printf("timing : %.5f\n\n", elapsed);
-  
+   printf("\ntiming : %.5f\n\n", elapsed);
+  printf("/****************************************************************************/\n");
   printf("Now, we test some 16-bit fixed-point arithmetic operations.\n");
   test_16(key, ks_key, alpha);
   

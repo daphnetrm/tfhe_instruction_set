@@ -40,5 +40,5 @@ The user will easily recognize the instructions being tested as they are denoted
   timing : 0.49377s
 
 This allows the user to verify if the homomorphic results are correct and to check the timings. 
-For comparison, the execution timings obtained on our machine with the same code are given in Appendix A and Section 8 of the article.
+For comparison, the execution timings obtained on our machine with the same code are given in Appendix A and Section 8 of the article. Finally, we give in the "ref_output.txt" file what the execution of the programm with inputs 42, 5, 12, 203 and 127 produces on our machine.
 

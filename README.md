@@ -32,7 +32,8 @@ Note that you can enter as many byte as you want, as long as you give at least t
 
 ## Instructions on how to interpret the outputs
 
-The execution timings as well as the instruction/algorithm being executed and the corresponding results are printed on the terminal in real time. 
+The execution timings as well as the instruction/algorithm being executed and the corresponding results are printed on the terminal. The programm will firstly output the homomorphic execution of our instruction set (both multivariate and univariate instructions) corresponding to Table 4 (Section 7) and Appendix A in the paper. 
+Then the programm will output the results of the execution of the algorithms presented in Section 8 of the article. Finally, some 16-bit fixed-point arithmetic instructions will be performed, including the homomorphic evaluation of a neuron with activation function sigmoid.
 The user will easily recognize the instructions being tested as they are denoted with the notations given in the paper. For instance the addition of two 8-bit payload ciphertexts encrypting 45 and 103 will output:
 
   ADD(45 + 103) = 148    

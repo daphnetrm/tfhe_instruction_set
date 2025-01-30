@@ -36,7 +36,7 @@ The execution timings as well as the instruction/algorithm being executed and th
 The user will easily recognize the instructions being tested as they are denoted with the notations given in the paper. For instance the addition of two 8-bit payload ciphertexts encrypting 45 and 103 will output:
 
   ADD(45 + 103) = 148    
-  timings : 0.49377s
+  timing : 0.49377s
 
 This allows the user to verify if the homomorphic results are correct and to check the timings. 
 For comparison, the execution timings obtained on our machine with the same code are given in Appendix A and Section 8 of the article.

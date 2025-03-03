@@ -40,9 +40,6 @@ add_executable(${APP_NAME} ${APP_SRCS} ${MAIN1} ${APP_HEADERS})
 
 include_directories(${TFHE_PREFIX}/src/include)
 
-
-target_link_libraries(${SOME_NAME} ${TFHE_PREFIX}/build/libtfhe/libtfhe-spqlios-avx.so)
-
 get_filename_component(TFHE_LIB_DIR "${TFHE_PREFIX}/build/libtfhe" ABSOLUTE)
  target_link_libraries(${APP_NAME} "${TFHE_LIB_DIR}/libtfhe-spqlios-avx.so") 
 
